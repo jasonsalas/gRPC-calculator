@@ -8,3 +8,4 @@
 ## TODO
 * add other mathematical operations
 * add persistent logging support (to a file)
+* containerize the server as a remote image
