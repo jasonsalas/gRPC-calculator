@@ -13,6 +13,36 @@ message AddResponse {
     int32 Result = 1;
 }
 
+message SubtractRequest {
+    int32 Operand1 = 1;
+    int32 Operand2 = 2;
+}
+
+message SubtractResponse {
+    int32 Result = 1;
+}
+
+message MultplyRequest {
+    int32 Operand1 = 1;
+    int32 Operand2 = 2;
+}
+
+message MultiplyResponse {
+    int32 Result = 1;
+}
+
+message DivisionRequest {
+    int32 Operand1 = 1;
+    int32 Operand2 = 2;
+}
+
+message DivisionResponse {
+    int32 Result = 1;
+}
+
 service Calculator {
     rpc Add(AddRequest) returns (AddResponse){};
+    rpc Subtract(SubtractRequest) returns (SubtractResponse){};
+    rpc Multiply(MultplyRequest) returns (MultiplyResponse){};
+    rpc Divide(DivisionRequest) returns (DivisionResponse){};
 }

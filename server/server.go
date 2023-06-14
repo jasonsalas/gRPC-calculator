@@ -15,15 +15,37 @@ var (
 	port = flag.Int("port", 50052, "the server port")
 )
 
+// server satisfies the calculator.CalculatorServer interface
 type server struct {
 	pb.UnimplementedCalculatorServer
 }
 
 func (s *server) Add(ctx context.Context, in *pb.AddRequest) (*pb.AddResponse, error) {
-	log.Printf("received: %v + %v", in.GetOperand1(), in.GetOperand2())
+	log.Printf("sum: %v + %v", in.GetOperand1(), in.GetOperand2())
 	result := in.GetOperand1() + in.GetOperand2()
 
 	return &pb.AddResponse{Result: result}, nil
+}
+
+func (s *server) Subtract(ctx context.Context, in *pb.SubtractRequest) (*pb.SubtractResponse, error) {
+	log.Printf("difference: %v - %v", in.GetOperand1(), in.GetOperand2())
+	result := in.GetOperand1() - in.GetOperand2()
+
+	return &pb.SubtractResponse{Result: result}, nil
+}
+
+func (s *server) Multiply(ctx context.Context, in *pb.MultplyRequest) (*pb.MultiplyResponse, error) {
+	log.Printf("product: %v * %v", in.GetOperand1(), in.GetOperand2())
+	result := in.GetOperand1() * in.GetOperand2()
+
+	return &pb.MultiplyResponse{Result: result}, nil
+}
+
+func (s *server) Divide(ctx context.Context, in *pb.DivisionRequest) (*pb.DivisionResponse, error) {
+	log.Printf("quotient: %v / %v", in.GetOperand1(), in.GetOperand2())
+	result := in.GetOperand1() / in.GetOperand2()
+
+	return &pb.DivisionResponse{Result: result}, nil
 }
 
 func main() {

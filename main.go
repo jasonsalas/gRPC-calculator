@@ -12,9 +12,10 @@ import (
 )
 
 var (
-	addr          = flag.String("addr", "localhost:50052", "the address to connect to")
-	operand1      = flag.Int("op1", 2, "the first operand")
-	operand2      = flag.Int("op2", 4, "the second operand")
+	addr     = flag.String("addr", "localhost:50052", "the address to connect to")
+	operator = flag.String("op", "add", "math operator - addition, subtraction, multiplication, division")
+	operand1 = flag.Int("op1", 2, "the first operand")
+	operand2 = flag.Int("op2", 4, "the second operand")
 )
 
 func main() {
@@ -28,9 +29,40 @@ func main() {
 	client := pb.NewCalculatorClient(conn)
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*1)
 	defer cancel()
-	result, err := client.Add(ctx, &pb.AddRequest{Operand1: int32(*operand1), Operand2: int32(*operand2)})
-	if err != nil {
-		log.Fatalf("unable to add integers: %v", err)
+
+	var result interface{}
+
+	switch *operator {
+	case "add":
+		result, err = client.Add(ctx, &pb.AddRequest{Operand1: int32(*operand1), Operand2: int32(*operand2)})
+		if err != nil {
+			log.Fatalf("unable to add integers: %v", err)
+		}
+		log.Printf("calling Add(): %v", result.(*pb.AddResponse).GetResult())
+	case "sub":
+		result, err = client.Subtract(ctx, &pb.SubtractRequest{Operand1: int32(*operand1), Operand2: int32(*operand2)})
+		if err != nil {
+			log.Fatalf("unable to subtract integers: %v", err)
+		}
+		log.Printf("calling Sub(): %v", result.(*pb.SubtractResponse).GetResult())
+	case "mul":
+		result, err = client.Multiply(ctx, &pb.MultplyRequest{Operand1: int32(*operand1), Operand2: int32(*operand2)})
+		if err != nil {
+			log.Fatalf("unable to multiply integers:%v", err)
+		}
+		log.Printf("calling Multiply(): %v", result.(*pb.MultiplyResponse).GetResult())
+	case "div":
+		result, err = client.Divide(ctx, &pb.DivisionRequest{Operand1: int32(*operand1), Operand2: int32(*operand2)})
+		if err != nil {
+			log.Fatalf("unable to divide integers: %v", err)
+		}
+		log.Printf("calling Divide(): %v", result.(*pb.DivisionResponse).GetResult())
+	default:
+		result, err = client.Add(ctx, &pb.AddRequest{Operand1: int32(*operand1), Operand2: int32(*operand2)})
+		if err != nil {
+			log.Fatalf("unable to add integers: %v", err)
+		}
+		log.Printf("calling Add(): %v", result.(*pb.AddResponse).GetResult())
 	}
-	log.Printf("calling Add(): %v", result.GetResult())
+
 }
