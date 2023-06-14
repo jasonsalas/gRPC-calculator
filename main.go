@@ -5,6 +5,7 @@ import (
 	"flag"
 	"log"
 	"os"
+	"path/filepath"
 	"time"
 
 	pb "github.com/jasonsalas/grpc-calc/calculator"
@@ -20,23 +21,26 @@ var (
 )
 
 func makeAccessLog() *log.Logger {
-	f, _ := os.OpenFile("./logs/access.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0775)
+	logPath, err := filepath.Abs("./logs/access.log")
+	if err !=nil{
+		panic(err)
+	}
+	f, _ := os.OpenFile(logPath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0775)
 	return log.New(f, "INFO: ", log.Ldate|log.Ltime|log.Lshortfile)
 }
 
 func main() {
-	
 	flag.Parse()
 	conn, err := grpc.Dial(*addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect to the gRPC server: %v", err)
 	}
 	defer conn.Close()
-	
+
 	client := pb.NewCalculatorClient(conn)
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*1)
 	defer cancel()
-	
+
 	accesslog := makeAccessLog()
 	var result interface{}
 	switch *operator {
