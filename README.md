@@ -1,5 +1,5 @@
 # gRPC calculator
-## A simple gRPC calling remote objects locally with high performance using protocol buffers and Go
+## A simple gRPC service calling remote objects with low latency, using protocol buffers and Go
 * forked demo from [Fullstack with Santosh](https://santoshk.dev/posts/2022/grpc-for-absolute-beginners-in-go/)
 * published to [Docker Hub](https://hub.docker.com/repository/docker/jasonsalas/grpc-calculator/) and [GitHub](https://github.com/jasonsalas/grpc-calculator)
 
