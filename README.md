@@ -10,5 +10,6 @@
 * push repo to GitHub
 * add persistent logging support (to a file)
 * add gRPC unit tests
+~~* error handling - divide by zero~~
 ~~* containerize the server as a remote image on Docker Hub~~
 ~~* call service from grpcurl? (requires TLS)~~

@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"flag"
 	"fmt"
 	"log"
@@ -12,10 +13,10 @@ import (
 )
 
 var (
-	port = flag.Int("port", 50052, "the server port")
+	port            = flag.Int("port", 50052, "the server port")
+	ErrDivideByZero = errors.New("you cannot divide by zero")
 )
 
-// server satisfies the calculator.CalculatorServer interface
 type server struct {
 	pb.UnimplementedCalculatorServer
 }
@@ -42,6 +43,10 @@ func (s *server) Multiply(ctx context.Context, in *pb.MultplyRequest) (*pb.Multi
 }
 
 func (s *server) Divide(ctx context.Context, in *pb.DivisionRequest) (*pb.DivisionResponse, error) {
+	if in.GetOperand2() == 0 {
+		return nil, ErrDivideByZero
+	}
+
 	log.Printf("quotient: %v / %v", in.GetOperand1(), in.GetOperand2())
 	result := in.GetOperand1() / in.GetOperand2()
 
