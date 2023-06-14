@@ -2,7 +2,7 @@
 
 build:
 	GOOS=linux go build -o ./bin/server ./server/server.go
-	GOOS=linux go build -o ./bin/client ./main.go
+	GOOS=linux go build -o ./bin/client ./cmd/client.go
 
 execute:
 	./bin/server
@@ -10,7 +10,7 @@ execute:
 compile_proto:
 	protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative calculator/calculator.proto
 
-docker:
+docker-run:
 	docker build -t grpc-calculator .
 	docker run --name protobufcalc -p 50052:50052 -d grpc-calculator
 	./client -op add -op1 867 -op2 5309
